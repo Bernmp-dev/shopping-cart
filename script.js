@@ -1,5 +1,3 @@
-// Fique a vontade para modificar o código já escrito e criar suas próprias funções!
-
 /**
  * Função responsável por criar e retornar o elemento de imagem do produto.
  * @param {string} imageSource - URL da imagem.
@@ -50,7 +48,7 @@
  * @param {Element} product - Elemento do produto.
  * @returns {string} ID do produto.
  */
-const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
+// const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
 /**
  * Função responsável por criar e retornar um item do carrinho.
@@ -64,26 +62,27 @@ const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', (event) => event.target.remove());
   return li;
 };
 
 //----------------------------------------------------------------------------
-async function addCartItem() {
-  const itemsContainer = document.querySelector('.items');
-  const toCart = document.querySelector('.cart__items');
+const itemsContainer = document.querySelector('.items');
+// const inCartProds = document.querySelector('cart__item');
+const cartBox = document.querySelector('.cart__items');
+// const empetyCart = document.querySelector('.empety-cart');
 
+async function addCartItem() {
   itemsContainer.childNodes.forEach((curr) => {
     curr.lastChild.addEventListener('click', async () => {
       const productById = await fetchItem(curr.firstChild.innerText);
-      toCart.appendChild(createCartItemElement((productById)));
+      cartBox.appendChild(createCartItemElement((productById)));
     });
   });
   }
 
 async function createProductItemElementRepeat() {
   const productList = await fetchProducts('computador'); 
-  const itemsContainer = document.querySelector('.items');
 
   productList.results.forEach((currProduct) => {
     itemsContainer.appendChild(createProductItemElement(currProduct));

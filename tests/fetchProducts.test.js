@@ -7,13 +7,13 @@ describe('1 - Teste a função fetchProducts', () => {
     expect(typeof fetchProducts).toBe('function');
   });
   test('Execute a função fetchProducts com o argumento "computador" e teste se fetch foi chamada', async () => {
-    const response = await fetchProducts('computador');
-    expect(fetch).toHaveBeenCalled();
+    await fetchProducts('computador');
+    expect(fetch).toBeCalled();
   })
   test('Teste se, ao chamar a função fetchProducts com o argumento "computador", a função fetch utiliza o endpoint "https://api.mercadolibre.com/sites/MLB/search?q=computador"', async () => {
-    const response = await fetchProducts('computador');
+    await fetchProducts('computador');
     expect(fetch)
-    .toHaveBeenCalledWith('https://api.mercadolibre.com/sites/MLB/search?q=computador'
+    .toBeCalledWith('https://api.mercadolibre.com/sites/MLB/search?q=computador'
     );
   });
   test('Teste se o retorno da função fetchProducts com o argumento "computador" é uma estrutura de dados igual ao objeto computadorSearch, que já está importado no arquivo.', async () => {

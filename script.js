@@ -1,6 +1,3 @@
-// Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
-// experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições! 
-
 // Fique a vontade para modificar o código já escrito e criar suas próprias funções!
 
 /**
@@ -8,12 +5,12 @@
  * @param {string} imageSource - URL da imagem.
  * @returns {Element} Elemento de imagem do produto.
  */
-const createProductImageElement = (imageSource) => {
+ function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
   return img;
-};
+}
 
 /**
  * Função responsável por criar e retornar qualquer elemento.
@@ -22,12 +19,12 @@ const createProductImageElement = (imageSource) => {
  * @param {string} innerText - Texto do elemento.
  * @returns {Element} Elemento criado.
  */
-const createCustomElement = (element, className, innerText) => {
+ function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
   return e;
-};
+}
 
 /**
  * Função responsável por criar e retornar o elemento do produto.
@@ -37,7 +34,7 @@ const createCustomElement = (element, className, innerText) => {
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
-const createProductItemElement = ({ id, title, thumbnail }) => {
+ function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -45,9 +42,8 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
   return section;
-};
+}
 
 /**
  * Função que recupera o ID do produto passado como parâmetro.
@@ -72,4 +68,19 @@ const createCartItemElement = ({ id, title, price }) => {
   return li;
 };
 
-window.onload = () => { };
+//----------------------------------------------------------------------------
+
+async function createProductItemElementRepeat() {
+  const productList = await fetchProducts('computador'); 
+  const itemsContainer = document.querySelector('.items');
+
+  productList.results.forEach((currProduct) => {
+    itemsContainer.appendChild(createProductItemElement(currProduct));
+  });
+  }
+
+//----------------------------------------------------------------------------
+
+window.onload = () => { 
+  createProductItemElementRepeat();
+};

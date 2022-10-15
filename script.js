@@ -3,7 +3,7 @@
  * @param {string} imageSource - URL da imagem.
  * @returns {Element} Elemento de imagem do produto.
  */
- function createProductImageElement(imageSource) {
+function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
@@ -17,7 +17,7 @@
  * @param {string} innerText - Texto do elemento.
  * @returns {Element} Elemento criado.
  */
- function createCustomElement(element, className, innerText) {
+function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
@@ -32,7 +32,7 @@
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
- function createProductItemElement({ id, title, thumbnail }) {
+function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -62,7 +62,7 @@ const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', (event) => event.target.remove());
+  li.addEventListener('click', (event) => removeEvents(event));
   return li;
 };
 
@@ -72,25 +72,51 @@ const itemsContainer = document.querySelector('.items');
 const cartBox = document.querySelector('.cart__items');
 // const empetyCart = document.querySelector('.empety-cart');
 
+let storedContent = [];
+
+function getStoredContent() {
+  storedContent = getSavedCartItems();
+
+  if (storedContent) {
+    storedContent.forEach((currItem) => {
+      cartBox.appendChild(createCartItemElement(currItem));
+    });
+  } else storedContent = [];
+}
+
+function storedCartItemAsObject({ id, title, price }) {
+  storedContent.push({ id, title, price });
+  saveCartItems(storedContent);
+}
+
+function removeEvents(event) {
+  const itemID = Array.prototype.indexOf.call(cartBox.childNodes, event.target);
+  storedContent.splice(itemID, 1);
+  event.target.remove();
+  saveCartItems(storedContent);
+}
+
 async function addCartItem() {
-  itemsContainer.childNodes.forEach((curr) => {
-    curr.lastChild.addEventListener('click', async () => {
-      const productById = await fetchItem(curr.firstChild.innerText);
+  itemsContainer.childNodes.forEach((currItem) => {
+    currItem.lastChild.addEventListener('click', async () => {
+      const productById = await fetchItem(currItem.firstChild.innerText);
       cartBox.appendChild(createCartItemElement((productById)));
+      storedCartItemAsObject(productById);
     });
   });
-  }
+}
 
 async function createProductItemElementRepeat() {
-  const productList = await fetchProducts('computador'); 
+  const productList = await fetchProducts('computador');
 
   productList.results.forEach((currProduct) => {
     itemsContainer.appendChild(createProductItemElement(currProduct));
   });
   addCartItem();
-  }
+}
 //----------------------------------------------------------------------------
 
-window.onload = () => { 
+window.onload = () => {
   createProductItemElementRepeat();
+  getStoredContent();
 };

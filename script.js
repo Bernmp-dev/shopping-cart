@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------
 const cartBox = document.querySelector('.cart__items');
 const cartSection = document.querySelector('.cart');
+const itemsContainer = document.querySelector('.items');
 
 let storedContent = [];
 
@@ -22,6 +23,16 @@ function removeEvents(event) {
   event.target.remove();
   saveCartItems(storedContent);
   totalPrice();
+}
+
+function emptyCartByButton() {
+  const emptyCartButton = document.querySelector('.empty-cart');
+  const priceInnerText = document.querySelector('.total-price');
+  emptyCartButton.addEventListener('click', () => {
+    localStorage.clear();
+    while (cartBox.firstChild) cartBox.removeChild(cartBox.firstChild);
+    priceInnerText.innerHTML = '';
+  });
 }
 //----------------------------------------------------------------------------
 
@@ -94,9 +105,6 @@ const createCartItemElement = ({ id, title, price }) => {
 };
 
 //----------------------------------------------------------------------------
-
-const itemsContainer = document.querySelector('.items');
-
 function createPriceSection() {
   const totalPriceSection = document.createElement('span');
   totalPriceSection.className = 'total-price';
@@ -143,4 +151,5 @@ window.onload = () => {
   createProductItemElementRepeat();
   getStoredContent();
   createPriceSection();
+  emptyCartByButton();
 };

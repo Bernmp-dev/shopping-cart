@@ -1,3 +1,15 @@
+//----------------------------------------------------------------------------
+const cartBox = document.querySelector('.cart__items');
+let storedContent = [];
+
+function removeEvents(event) {
+  const itemID = Array.prototype.indexOf.call(cartBox.childNodes, event.target);
+  storedContent.splice(itemID, 1);
+  event.target.remove();
+  saveCartItems(storedContent);
+}
+//----------------------------------------------------------------------------
+
 /**
  * Função responsável por criar e retornar o elemento de imagem do produto.
  * @param {string} imageSource - URL da imagem.
@@ -69,10 +81,7 @@ const createCartItemElement = ({ id, title, price }) => {
 //----------------------------------------------------------------------------
 const itemsContainer = document.querySelector('.items');
 // const inCartProds = document.querySelector('cart__item');
-const cartBox = document.querySelector('.cart__items');
 // const empetyCart = document.querySelector('.empety-cart');
-
-let storedContent = [];
 
 function getStoredContent() {
   storedContent = getSavedCartItems();
@@ -89,18 +98,11 @@ function storedCartItemAsObject({ id, title, price }) {
   saveCartItems(storedContent);
 }
 
-function removeEvents(event) {
-  const itemID = Array.prototype.indexOf.call(cartBox.childNodes, event.target);
-  storedContent.splice(itemID, 1);
-  event.target.remove();
-  saveCartItems(storedContent);
-}
-
 async function addCartItem() {
   itemsContainer.childNodes.forEach((currItem) => {
     currItem.lastChild.addEventListener('click', async () => {
       const productById = await fetchItem(currItem.firstChild.innerText);
-      cartBox.appendChild(createCartItemElement((productById)));
+      cartBox.appendChild(createCartItemElement(productById));
       storedCartItemAsObject(productById);
     });
   });
